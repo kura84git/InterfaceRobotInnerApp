@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,31 +10,26 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import model.PostRemindLogic;
 import model.Remind;
+import model.RemindSortLogic;
 
 
-
-@WebServlet("/Reminder")
-public class Reminder extends HttpServlet {
+@WebServlet("/ReminderSort")
+public class ReminderSort extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		PostRemindLogic postRemindLogic = new PostRemindLogic();
-		List<Remind> remindList = postRemindLogic.execute();
+		RemindSortLogic remindSortLogic = new RemindSortLogic();
+		Set<Remind> categoryList = remindSortLogic.findCategory();
 
-		HttpSession session = request.getSession();
-		session.setAttribute("remindList", remindList);
+		request.setAttribute("categoryList", categoryList);
 
-		String path = "/WEB-INF/reminder.jsp";
+		String path = "/WEB-INF/reminderSort.jsp";
 		RequestDispatcher dis = request.getRequestDispatcher(path);
 		dis.forward(request, response);
-
 
 	}
 
@@ -42,29 +38,25 @@ public class Reminder extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		request.setCharacterEncoding("UTF-8");
-		String remind = request.getParameter("remind");
-		String category = request.getParameter("category");
+		String specifiedCategory = request.getParameter("category");
 
-		if(remind != null && remind.length() != 0) {
+		List<Remind> remindSortList = null;
 
-			Remind remindLatest  = new Remind(remind, category);
+		if(specifiedCategory != null && specifiedCategory.length() != 0) {
 
-			PostRemindLogic postRemindLogic = new PostRemindLogic();
-			postRemindLogic.create(remindLatest);
+			RemindSortLogic remindSortLogic = new RemindSortLogic();
+			remindSortList = remindSortLogic.sort(specifiedCategory);
 
 		} else {
 			request.setAttribute("errorMsg", "必要項目を入力してください。");
 		}
 
-		PostRemindLogic postRemindLogic = new PostRemindLogic();
-		List<Remind> remindList = postRemindLogic.execute();
+		request.setAttribute("remindSortList", remindSortList);
 
-		HttpSession session = request.getSession();
-		session.setAttribute("remindList", remindList);
-
-		String path = "/WEB-INF/reminder.jsp";
+		String path = "/WEB-INF/reminderSortResult.jsp";
 		RequestDispatcher dis = request.getRequestDispatcher(path);
 		dis.forward(request, response);
+
 
 
 	}
