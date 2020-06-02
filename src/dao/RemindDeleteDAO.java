@@ -14,17 +14,24 @@ public class RemindDeleteDAO {
 	private final String DB_PASS = "root";
 
 
-	public boolean delete(User loginUser, Remind remindDelete) {
+	public boolean delete(User loginUser, Remind remindDelete) { //リマインドの削除処理
 		try(Connection con = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+
+			//SQL文
 			String sql = "DELETE FROM REMIND WHERE ID = ? AND REMIND = ? AND CATEGORY = ?";
+
+			//SQL文送信
 			PreparedStatement pStmt = con.prepareStatement(sql);
 
+			//SQL文に情報を渡す
 			pStmt.setString(1, loginUser.getId());
 			pStmt.setString(2, remindDelete.getRemind());
 			pStmt.setString(3, remindDelete.getCategory());
 
+			//実行結果の取得
 			int rs = pStmt.executeUpdate();
 
+			//実行できなかった場合
 			if(rs != 1) {
 				return false;
 			}
@@ -33,6 +40,7 @@ public class RemindDeleteDAO {
 			e.printStackTrace();
 			return false;
 		}
+		//実行できた場合
 		return true;
 	} //delete()
 

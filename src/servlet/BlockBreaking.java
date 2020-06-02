@@ -17,6 +17,7 @@ public class BlockBreaking extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		//blockBreaking.htmlへフォワード
 		String path = "/WEB-INF/html/blockBreaking.html";
 		RequestDispatcher dis = request.getRequestDispatcher(path);
 		dis.forward(request, response);

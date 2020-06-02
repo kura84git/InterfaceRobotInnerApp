@@ -18,18 +18,30 @@ public class RemindSortDAO {
 	private final String DB_USER = "root";
 	private final String DB_PASS = "root";
 
-	public Set<Remind> findCategory(User loginUser) {
+	public Set<Remind> findCategory(User loginUser) { //カテゴリ一覧の取得
+
+		//空のHashSetを用意(SQL文にも重複排除のDISTINCTをかけているが、念のためコレクションも重複排除のHashSetを使用している)
 		Set<Remind> categoryList = new HashSet<>();
 
 		try(Connection con = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+
+			//SQL文(カテゴリの重複排除)
 			String sql = "SELECT DISTINCT CATEGORY FROM REMIND WHERE ID = ? ORDER BY REMIND_ID DESC";
+
+			//SQL文送信
 			PreparedStatement pStmt = con.prepareStatement(sql);
 
+			//SQL文に情報を渡す
 			pStmt.setString(1, loginUser.getId());
 
+			//実行結果取得
 			ResultSet rs = pStmt.executeQuery();
 
+			//取得結果の繰り返し処理
 			while(rs.next()) {
+
+				//取得結果をHashSetに格納
+
 				String category = rs.getString("CATEGORY");
 
 				Remind categoryPiece = new Remind(category);
@@ -45,19 +57,30 @@ public class RemindSortDAO {
 		return categoryList;
 	}//findCategory()
 
-	public List<Remind> sort(User loginUser, String specifiedCategory) {
+	public List<Remind> sort(User loginUser, String specifiedCategory) { //カテゴリでソート処理
+
+		//空のArrayListの用意
 		List<Remind> remindList = new ArrayList<>();
 
 		try(Connection con = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
+
+			//SQL文
 			String sql = "SELECT ID, REMIND, CATEGORY FROM REMIND WHERE ID = ? AND CATEGORY = ? ORDER BY REMIND_ID DESC";
+
+			//SQL文送信
 			PreparedStatement pStmt = con.prepareStatement(sql);
 
+			//SQL文に情報を渡す
 			pStmt.setString(1, loginUser.getId());
 			pStmt.setString(2, specifiedCategory);
 
+			//実行結果取得
 			ResultSet rs = pStmt.executeQuery();
 
+			//取得結果の繰り返し処理
 			while(rs.next()) {
+
+				//取得結果をArrayListに格納
 
 				String id = rs.getString("ID");
 				String remind = rs.getString("REMIND");

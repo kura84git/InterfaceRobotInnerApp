@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public class RegisterUser implements Serializable {
+public class RegisterUser implements Serializable { //アカウント情報JavaBeans
 	private String id;
 	private String name;
 	private String pass;

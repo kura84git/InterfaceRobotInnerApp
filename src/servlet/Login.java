@@ -30,6 +30,7 @@ public class Login extends HttpServlet {
 
 		request.setCharacterEncoding("UTF-8");
 
+		//リクエストパラメータ取得
 		String id = request.getParameter("id");
 		String pass = request.getParameter("pass");
 

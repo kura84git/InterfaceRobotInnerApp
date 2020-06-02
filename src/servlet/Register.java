@@ -53,6 +53,7 @@ public class Register extends HttpServlet {
 
 		request.setCharacterEncoding("UTF-8");
 
+		//リクエストパラメータ取得
 		String id = request.getParameter("id");
 		String name = request.getParameter("name");
 		String pass = request.getParameter("pass");

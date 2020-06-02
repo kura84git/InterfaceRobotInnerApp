@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public class Remind implements Serializable{
+public class Remind implements Serializable{ //リマインド情報JavaBeans
 	private String id;
 	private String remind;
 	private String category;

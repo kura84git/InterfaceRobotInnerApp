@@ -13,16 +13,14 @@ public class AccountDAO {
 	private final String DB_PASS = "root";
 
 
-	public boolean insert(RegisterUser registerUser) {
-
-
+	public boolean insert(RegisterUser registerUser) { //アカウント登録
 
 		try(Connection con = DriverManager.getConnection(JDBC_URL,DB_USER,DB_PASS)){
 
-			//SQL文の準備
+			//SQL文
 			String sql = "INSERT INTO ACCOUNT (ID,NAME,PASS,MAIL,BOTNAME) VALUES(?,?,?,?,?)";
 
-			//SQL文を送る
+			//SQL文送信
 			PreparedStatement pStmt = con.prepareStatement(sql);
 
 			//SQL文に情報を渡す
@@ -32,9 +30,10 @@ public class AccountDAO {
 			pStmt.setString(4, registerUser.getMail());
 			pStmt.setString(5, registerUser.getBotName());
 
-			//SQL文を実行して結果を取得する
+			//SQL文を実行して結果を取得
 			int rs = pStmt.executeUpdate();
 
+			//実行できない場合
 			if(rs !=1) {
 				return false;
 			}
@@ -43,6 +42,7 @@ public class AccountDAO {
 			return false;
 		}
 
+		//実行できた場合
 		return true;
 
 	}//insert()

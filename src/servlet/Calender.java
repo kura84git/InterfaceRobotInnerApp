@@ -15,6 +15,7 @@ public class Calender extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		//calender.jspへフォワード
 		String path = "/WEB-INF/calender.jsp";
 		RequestDispatcher dis = request.getRequestDispatcher(path);
 		dis.forward(request, response);
