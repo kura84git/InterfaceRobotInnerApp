@@ -10,41 +10,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.User;
 
-
-@WebServlet("/Main")
-public class Main extends HttpServlet {
+@WebServlet("/Logout")
+public class Logout extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		//ログインしているか確認するためセッションスコープからユーザー情報を取得
+		//セッションスコープの破棄
 		HttpSession session = request.getSession();
-		User loginUser = (User) session.getAttribute("loginUser");
+
+		session.invalidate();
 
 
-		if(loginUser == null) { //ログインしていない場合
-
-			//最初にindex.jspへリダイレクト
-			response.sendRedirect("/Interface_Robot_InnerApp/index.jsp");
-
-		} else { //ログイン済みの場合
-
-			//main.jspへフォワード
-			String path = "/WEB-INF/main.jsp";
-			RequestDispatcher dispatcher = request.getRequestDispatcher(path);
-			dispatcher.forward(request, response);
-		}
+		//logout.jspへフォワード
+		String path = "/WEB-INF/logout.jsp";
+		RequestDispatcher dis = request.getRequestDispatcher(path);
+		dis.forward(request, response);
 
 	}
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-
 
 	}
 

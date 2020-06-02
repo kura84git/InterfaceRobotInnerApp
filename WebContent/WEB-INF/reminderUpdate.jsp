@@ -13,9 +13,10 @@ Remind remindUpdate = (Remind)session.getAttribute("remindUpdate");
 <body>
 	<h1>更新</h1>
 	<h2>更新内容を入力してください</h2>
-	<form action="/Interface_Robot_InnerApp/ReminderUpdate?action=register" method="post">
+	<form action="/Interface_Robot_InnerApp/ReminderUpdate?action=update" method="post">
 		<p>リマインド：<input type="text" name="specifiedRemind"></p>
 		<p>カテゴリ：<input type="text" name="specifiedCategory"></p>
+		<p><input type="submit" value="更新！"></p>
 	</form>
 
 	<p>現在のリマインド内容</p>

@@ -1,7 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,32 +10,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import model.PostRemindLogic;
 import model.Remind;
+import model.RemindDeleteLogic;
 import model.User;
 
-
-
-@WebServlet("/Reminder")
-public class Reminder extends HttpServlet {
+@WebServlet("/ReminderDelete")
+public class ReminderDelete extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession session = request.getSession();
 		User loginUser = (User)session.getAttribute("loginUser");
+		Remind remindDelete = (Remind) session.getAttribute("remindDelete");
 
-		PostRemindLogic postRemindLogic = new PostRemindLogic();
-		List<Remind> remindList = postRemindLogic.execute(loginUser);
+		RemindDeleteLogic remindDeleteLogic = new RemindDeleteLogic();
+		boolean deleteResult = remindDeleteLogic.delete(loginUser, remindDelete);
 
-		session.setAttribute("remindList", remindList);
+		request.setAttribute("deleteResult", deleteResult);
 
-		String path = "/WEB-INF/reminder.jsp";
+		String path = "/WEB-INF/reminderDeleteResult.jsp";
 		RequestDispatcher dis = request.getRequestDispatcher(path);
 		dis.forward(request, response);
-
 
 	}
 
@@ -44,34 +40,17 @@ public class Reminder extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		HttpSession session = request.getSession();
-		User loginUser = (User)session.getAttribute("loginUser");
-		String id = loginUser.getId();
-
-		request.setCharacterEncoding("UTF-8");
 		String remind = request.getParameter("remind");
 		String category = request.getParameter("category");
 
-		if(remind != null && remind.length() != 0) {
+		Remind remindDelete = new Remind(remind, category);
 
-			Remind remindLatest  = new Remind(id, remind, category);
+		HttpSession session = request.getSession();
+		session.setAttribute("remindDelete", remindDelete);
 
-			PostRemindLogic postRemindLogic = new PostRemindLogic();
-			postRemindLogic.create(remindLatest);
-
-		} else {
-			request.setAttribute("errorMsg", "必要項目を入力してください。");
-		}
-
-		PostRemindLogic postRemindLogic = new PostRemindLogic();
-		List<Remind> remindList = postRemindLogic.execute(loginUser);
-
-		session.setAttribute("remindList", remindList);
-
-		String path = "/WEB-INF/reminder.jsp";
+		String path = "/WEB-INF/reminderDeleteConfirm.jsp";
 		RequestDispatcher dis = request.getRequestDispatcher(path);
 		dis.forward(request, response);
-
 
 	}
 

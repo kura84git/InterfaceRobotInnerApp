@@ -30,9 +30,14 @@ String errorMsg = (String)request.getAttribute("errorMsg");
 		<p><%= remind.getRemind() %> <br> カテゴリ：<%= remind.getCategory() %></p>
 		<p>
 			<form action="/Interface_Robot_InnerApp/ReminderUpdate" method="post">
-				<input type="hidden" name="remind" value="${remind.remind}">
-				<input type="hidden" name="category" value="${remind.category}">
+				<input type="hidden" name="remind" value="<%= remind.getRemind() %>">
+				<input type="hidden" name="category" value="<%= remind.getCategory() %>">
 				<input type="submit" value="更新">
+			</form>
+			<form action="/Interface_Robot_InnerApp/ReminderDelete" method="post">
+				<input type="hidden" name="remind" value="<%= remind.getRemind() %>">
+				<input type="hidden" name="category" value="<%= remind.getCategory() %>">
+				<input type="submit" value="削除"><br><br>
 			</form>
 		</p>
 	<% } %>

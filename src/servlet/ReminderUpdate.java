@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import model.Remind;
 import model.RemindUpdateLogic;
+import model.User;
 
 
 @WebServlet("/ReminderUpdate")
@@ -22,21 +23,25 @@ public class ReminderUpdate extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String action = request.getParameter("action");
-		if(action.equals("done")) {
+		if(action != null) {
 			HttpSession session = request.getSession();
-			Remind remindUpdate = (Remind) session.getAttribute("specifiedRemindUpdate");
+			User loginUser = (User)session.getAttribute("loginUser");
+			Remind remindUpdate = (Remind) session.getAttribute("remindUpdate");
+			Remind specifiedRemindUpdate = (Remind) session.getAttribute("specifiedRemindUpdate");
 
 			RemindUpdateLogic remindUpdateLogic = new RemindUpdateLogic();
-			remindUpdateLogic.update(remindUpdate);
+			boolean updateResult = remindUpdateLogic.update(loginUser, remindUpdate, specifiedRemindUpdate);
 
-			String path = "/WEB-INF/remindUpdateResult.jsp";
+			request.setAttribute("updateResult", updateResult);
+
+			String path = "/WEB-INF/reminderUpdateResult.jsp";
 			RequestDispatcher dis = request.getRequestDispatcher(path);
 			dis.forward(request, response);
 
 		}
 
 		else {
-			String path = "/WEB-INF/remindUpdate.jsp";
+			String path = "/WEB-INF/reminderUpdate.jsp";
 			RequestDispatcher dis = request.getRequestDispatcher(path);
 			dis.forward(request, response);
 		}
@@ -60,12 +65,12 @@ public class ReminderUpdate extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("remindUpdate", remindUpdate);
 
-			String path = "/WEB-INF/remindUpdate.jsp";
+			String path = "/WEB-INF/reminderUpdate.jsp";
 			RequestDispatcher dis = request.getRequestDispatcher(path);
 			dis.forward(request, response);
 		}
 
-		else if(action.equals("register")) {
+		else if(action.equals("update")) {
 
 			String specifiedRemind = request.getParameter("specifiedRemind");
 			String specifiedCategory = request.getParameter("specifiedCategory");
@@ -75,7 +80,7 @@ public class ReminderUpdate extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("specifiedRemindUpdate", specifiedRemindUpdate);
 
-			String path = "/WEB-INF/remindUpdateConfirm.jsp";
+			String path = "/WEB-INF/reminderUpdateConfirm.jsp";
 			RequestDispatcher dis = request.getRequestDispatcher(path);
 			dis.forward(request, response);
 

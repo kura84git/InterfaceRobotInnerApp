@@ -10,9 +10,9 @@ public class PostRemindLogic {
 		dao.create(remindLatest);
 	}
 
-	public List<Remind> execute() {
+	public List<Remind> execute(User loginUser) {
 		RemindDAO dao = new RemindDAO();
-		List<Remind> remindList = dao.findAll();
+		List<Remind> remindList = dao.findAll(loginUser);
 
 		return remindList;
 	}

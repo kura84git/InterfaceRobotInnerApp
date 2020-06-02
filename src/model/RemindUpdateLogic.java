@@ -3,8 +3,9 @@ package model;
 import dao.RemindUpdateDAO;
 
 public class RemindUpdateLogic {
-	public void update(Remind remindUpdate) {
+	public boolean update(User loginUser, Remind remindUpdate, Remind specifiedRemindUpdate) {
 		RemindUpdateDAO dao = new RemindUpdateDAO();
-		dao.update(remindUpdate);
+		int remind_id = dao.select(loginUser, remindUpdate);
+		return dao.update(loginUser, remind_id, specifiedRemindUpdate);
 	}
 }

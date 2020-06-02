@@ -10,9 +10,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.Remind;
 import model.RemindSortLogic;
+import model.User;
 
 
 @WebServlet("/ReminderSort")
@@ -22,8 +24,11 @@ public class ReminderSort extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		HttpSession session = request.getSession();
+		User loginUser = (User)session.getAttribute("loginUser");
+
 		RemindSortLogic remindSortLogic = new RemindSortLogic();
-		Set<Remind> categoryList = remindSortLogic.findCategory();
+		Set<Remind> categoryList = remindSortLogic.findCategory(loginUser);
 
 		request.setAttribute("categoryList", categoryList);
 
@@ -37,6 +42,9 @@ public class ReminderSort extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		HttpSession session = request.getSession();
+		User loginUser = (User)session.getAttribute("loginUser");
+
 		request.setCharacterEncoding("UTF-8");
 		String specifiedCategory = request.getParameter("category");
 
@@ -45,10 +53,13 @@ public class ReminderSort extends HttpServlet {
 		if(specifiedCategory != null && specifiedCategory.length() != 0) {
 
 			RemindSortLogic remindSortLogic = new RemindSortLogic();
-			remindSortList = remindSortLogic.sort(specifiedCategory);
+			remindSortList = remindSortLogic.sort(loginUser, specifiedCategory);
 
 		} else {
 			request.setAttribute("errorMsg", "必要項目を入力してください。");
+			String path = "/WEB-INF/reminderSort.jsp";
+			RequestDispatcher dis = request.getRequestDispatcher(path);
+			dis.forward(request, response);
 		}
 
 		request.setAttribute("remindSortList", remindSortList);

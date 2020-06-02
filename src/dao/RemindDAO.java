@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Remind;
+import model.User;
 
 public class RemindDAO {
 
@@ -18,10 +19,11 @@ public class RemindDAO {
 
 	public boolean create(Remind remindLatest) {
 		try(Connection con = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-			String sql = "INSERT INTO REMIND (ID, REMIND, CATEGORY) VALUES ('7777', ?, ?)";
+			String sql = "INSERT INTO REMIND (ID, REMIND, CATEGORY) VALUES (?, ?, ?)";
 			PreparedStatement pStmt = con.prepareStatement(sql);
-			pStmt.setString(1, remindLatest.getRemind());
-			pStmt.setString(2, remindLatest.getCategory());
+			pStmt.setString(1, remindLatest.getId());
+			pStmt.setString(2, remindLatest.getRemind());
+			pStmt.setString(3, remindLatest.getCategory());
 
 			int rs = pStmt.executeUpdate();
 
@@ -36,12 +38,15 @@ public class RemindDAO {
 		return true;
 	} //create()
 
-	public List<Remind> findAll() {
+	public List<Remind> findAll(User loginUser) {
 		List<Remind> remindList = new ArrayList<>();
 
 		try(Connection con = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS)) {
-			String sql = "SELECT ID, REMIND, CATEGORY FROM REMIND WHERE ID = \"7777\"";
+			String sql = "SELECT ID, REMIND, CATEGORY FROM REMIND WHERE ID = ? ORDER BY REMIND_ID DESC";
 			PreparedStatement pStmt = con.prepareStatement(sql);
+
+			pStmt.setString(1, loginUser.getId());
+
 			ResultSet rs = pStmt.executeQuery();
 
 			while(rs.next()) {

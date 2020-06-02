@@ -2,9 +2,20 @@ create database interface_robot_inner;
 
 use interface_robot_inner;
 
- create database remind (
+ create table remind (
+ remind_id int primary key auto_increment,
  id char(6) not null,
  remind varchar(255) not null,
  category varchar(20) not null);
 
- insert into remind values ('7777', 'こんにちは', '挨拶');
+ insert into remind(id, remind, category) values ('7777', 'こんにちは', '挨拶');
+
+
+ create table account(
+ id char(6) primary key,
+ name varchar(20) not null,
+ pass varchar(20) not null,
+ mail varchar(20) not null,
+ botname varchar(20) not null);
+
+ insert into account values (111111, 'test', '111111', '111@111.com', 'test');
