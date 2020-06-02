@@ -28,6 +28,13 @@ String errorMsg = (String)request.getAttribute("errorMsg");
 
 	<% for(Remind remind : remindList) { %>
 		<p><%= remind.getRemind() %> <br> カテゴリ：<%= remind.getCategory() %></p>
+		<p>
+			<form action="/Interface_Robot_InnerApp/ReminderUpdate" method="post">
+				<input type="hidden" name="remind" value="${remind.remind}">
+				<input type="hidden" name="category" value="${remind.category}">
+				<input type="submit" value="更新">
+			</form>
+		</p>
 	<% } %>
 
 	<p><a href="/Interface_Robot_InnerApp/Main">トップへ戻る</a></p>

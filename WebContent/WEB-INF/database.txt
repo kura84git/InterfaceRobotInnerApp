@@ -1,0 +1,10 @@
+create database interface_robot_inner;
+
+use interface_robot_inner;
+
+ create database remind (
+ id char(6) not null,
+ remind varchar(255) not null,
+ category varchar(20) not null);
+
+ insert into remind values ('7777', 'こんにちは', '挨拶');
