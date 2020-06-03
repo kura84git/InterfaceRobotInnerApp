@@ -1,0 +1,14 @@
+@charset "UTF-8";
+div.main{
+	height: 100vh;
+	width: 100vw;
+	/*background-color: #99cc00;*/
+	display: -webkit-flex;
+    display: flex;
+}
+div.left-contents{
+	width: 50%;
+}
+div.right-contents{
+	width: 50%;
+}
